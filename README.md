@@ -17,7 +17,7 @@ You can run on the existing installation. (e.g.DC1)
 
 You can install it on your system by following the steps below:
 
-$ wget https://raw.githubusercontent.com/eesmer/sambad-tui/master/sambadtui.sh
+wget https://raw.githubusercontent.com/eesmer/sambad-tui/master/sambadtui.sh
 
 ## How to use
 You can keep the sambadtui.sh file in any directory.
