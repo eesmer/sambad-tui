@@ -15,12 +15,12 @@ You can run on the existing installation. (e.g.DC1)
 
 ## Installation
 
-You can install it on your system by following the steps below:
+You can download to your computer with the following command:
 
 wget https://raw.githubusercontent.com/eesmer/sambad-tui/master/sambadtui.sh
 
 ## How to use
-You can keep the sambadtui.sh file in any directory.
+You can keep the Sambadtui.sh file in any directory and run it with the following command.
 
 ```sh
 $ bash sambadtui.sh
