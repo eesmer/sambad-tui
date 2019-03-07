@@ -20,12 +20,12 @@ The following lines writed the current versions features and the items planned f
 User Management, Group Management, DNS Management, Settings(password length,complexity,age), Maintenance(DB check, show fsmo roles,processes)
 ----------------------------------------------------------------------------------------------------------------------------------------------
 Future Releases;
-- To be able to manage other types of DNS records
-- To be able to manage more than one Zone
-- To be able to do OU management
-- To be able to manage FSMO roles
-- To work with more than one DC
-- To be able to manage Group Policy
+- to be able to manage other types of DNS records
+- to be able to manage more than one Zone
+- to be able to do OU management
+- to be able to manage FSMO roles
+- to be able to work with more than one DC
+- to be able to manage Group Policy
 - Web interface maybe:)
 EOF
 fi
