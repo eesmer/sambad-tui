@@ -1,8 +1,13 @@
 #!/bin/bash
 
+if ! [ -x "$(command -v whiptail)" ]; then
+apt -y install whiptail
+fi
+
 SERVER=$(ip route get 8.8.8.8 | awk '/8.8.8.8/ {print $NF}')
-DOMAIN_NAME=$(samba-tool domain info $SERVER |grep Netbios |cut -d':' -f2 |cut -d' ' -f2)
-ZONE=$(echo $DOMAIN_NAME | cut -d'.' -f1)
+ZONE=$(samba-tool domain info $SERVER |grep Domain |cut -d':' -f2 |cut -d' ' -f2)
+
+samba-tool domain passwordsettings set --min-pwd-age=0 # for Password_Change_Next_Logon to work after create user
 
 if [ ! -e "about" ]; then
 cat > about <<EOF
@@ -66,7 +71,9 @@ USER_NAME=$(whiptail --title "User Name" --inputbox "Please enter the Name" 10 6
 USER_SURNAME=$(whiptail --title "User Surname" --inputbox "Please enter the Last Name" 10 60  3>&1 1>&2 2>&3)
 USER_EMAIL=$(whiptail --title "Email Address" --inputbox "Please enter the E-Mail Address" 10 60  3>&1 1>&2 2>&3)
 USER_DEPARTMENT=$(whiptail --title "User Department" --inputbox "Please enter the Department" 10 60  3>&1 1>&2 2>&3)
-samba-tool user create $DOMAIN_USER --given-name=$USER_NAME --surname=$USER_SURNAME --mail-address=$USER_EMAIL --department=$USER_DEPARTMENT --must-change-at-next-login
+USER_PASSWORD=$(whiptail --title "User Password" --passwordbox "Please enter the Password" 10 60  3>&1 1>&2 2>&3)
+samba-tool user create $DOMAIN_USER "TempPassword1" --given-name=$USER_NAME --surname=$USER_SURNAME --mail-address=$USER_EMAIL --department=$USER_DEPARTMENT
+samba-tool user setpassword --newpassword="$USER_PASSWORD" --must-change-at-next-login $DOMAIN_USER
 pause
 }
 
@@ -107,10 +114,10 @@ pause
 function set_expiration(){
 echo "::Set Expiration::"
 echo "------------------"
-choice=$(whiptail --title "Set Expiration" --radiolist "Choose:"     10 25 5 \
+CHOICE=$(whiptail --title "Set Expiration" --radiolist "Choose:"     10 25 5 \
 	"SetExpiration" "" on \
 	"NoExpiry" "" off 3>&1 1>&2 2>&3)
-case $choice in
+case $CHOICE in
 SetExpiration)
 DOMAIN_USER=$(whiptail --title "User UserName" --inputbox "Please enter the Username" 10 60  3>&1 1>&2 2>&3)
 DAYS=$(whiptail --title "Expiry Day" --inputbox "Please enter the number of days" 10 60  3>&1 1>&2 2>&3)
@@ -141,6 +148,7 @@ echo "---------------------------------"
 DOMAIN_USER=$(whiptail --title "Change Password at Next Logon" --inputbox "Please enter the Username" 10 60  3>&1 1>&2 2>&3)
 PASSWORD=$(whiptail --title "Set Password" --passwordbox "Please enter the Temporary Password" 10 60  3>&1 1>&2 2>&3)
 samba-tool user setpassword --newpassword="$PASSWORD" --must-change-at-next-login $DOMAIN_USER
+echo "password change applied for next login"
 pause
 }
 
@@ -224,7 +232,7 @@ echo "::Delete a DNS record::"
 echo "-----------------------"
 RECORD_NAME=$(whiptail --title "Record Name" --inputbox "Please enter the Record Name" 10 60  3>&1 1>&2 2>&3)
 RECORD_IP=$(whiptail --title "Record IP Address" --inputbox "Please enter the Record IP Adress" 10 60  3>&1 1>&2 2>&3)
-samba-tool dns delete $SERVER $DOMAIN $RECORD_NAME A $RECORD_IP -U administrator
+samba-tool dns delete $SERVER $ZONE $RECORD_NAME A $RECORD_IP -U administrator
 pause
 }
 
