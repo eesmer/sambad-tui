@@ -1,4 +1,4 @@
-# samba Active Directory-Text User Interface
+# Samba Active Directory -Text User Interface
 Sambadtui, provides a Text User Interface for Samba Active Directory.
 <br> This application in used on the Active Directory Server.
 
