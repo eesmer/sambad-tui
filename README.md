@@ -6,22 +6,18 @@ Sambadtui, does not install Active Directory.
 You can run on the existing installation. (e.g.DC1)
 
 ## Features
-
 - User Management
 - Group Management
 - DNS Management
 - Settings (password length,complexity,age)
 - Maintenance
 
-## Installation
+## Requirements
+It works in Debian environment. Desktop environment is not required.
 
-You can download to your computer with the following command:
-
-wget https://raw.githubusercontent.com/eesmer/sambad-tui/master/sambadtui.sh
-
-## How to use
-You can keep the Sambadtui.sh file in any directory and run it with the following command.
-
+## Installation and Usage
 ```sh
+$ wget https://raw.githubusercontent.com/eesmer/sambad-tui/master/sambadtui.sh
 $ bash sambadtui.sh
 ```
+Use sambadtui with root user
