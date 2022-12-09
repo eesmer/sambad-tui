@@ -17,6 +17,10 @@ If you are interested in this topic; you can have a look at [DebianDC](https://g
 - Settings (password length,complexity,age)
 - Maintenance and Troubleshooting
 
+---
+![alt text](doc/sambadtui-screenshot-1.png "SambaAD TUI Main Menu")
+---
+
 ## Requirements
 It works in Debian environment. Desktop environment is not required.
 
