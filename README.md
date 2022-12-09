@@ -12,8 +12,10 @@ If you are interested in this topic; you can have a look at [DebianDC](https://g
 - User Management
 - Group Management
 - DNS Management
+- FSMO and DNS Role Management
+- DC Management
 - Settings (password length,complexity,age)
-- Maintenance
+- Maintenance and Troubleshooting
 
 ## Requirements
 It works in Debian environment. Desktop environment is not required.
