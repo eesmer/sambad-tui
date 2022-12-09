@@ -1,5 +1,5 @@
 #!/bin/bash
-#buildnumber:20221209-09:45
+#buildnumber:09122022-13:00
 
 if ! [ -x "$(command -v whiptail)" ]; then
 apt -y install whiptail
@@ -22,7 +22,7 @@ read -p "$message" readEnterKey
 function show_menu(){
 date
 echo "   |--------------------------------------------------------------------------------------|"
-echo "   | SambaAD-tui v1.1                                                                     |"
+echo "   | SambaAD-tui v2                                                                       |"
 echo "   |--------------------------------------------------------------------------------------|"
 echo "   | User Management           | Group Management | OU Management | DNS Management        |"
 echo "   |--------------------------------------------------------------------------------------|"
@@ -34,11 +34,13 @@ echo "   | 5.Change Password         | 15.Group List    |                       
 echo "   | 6.Change Pass.Next Logon  | 16 Member List   |                                       |"
 echo "   | 7.User List               |                  |                                       |"
 echo "   |--------------------------------------------------------------------------------------|"
-echo "   | FSMO Management           | DC Management    |                                       |"
+echo "   | FSMO & Role Management    | DC Management    |                                       |"
 echo "   |--------------------------------------------------------------------------------------|"
-echo "   | 51.Role Transfer          | 55.Show DC Hosts |                                       |"
-echo "   | 82.Show Roles             | 56.Demote DC     |                                       |"
-echo "   |                           | 57.Add ADC       |                                       |"
+echo "   | 51.Transfer FSMO Role     | 55.Show DC Hosts |                                       |"
+echo "   | 52.Seize FSMO Role        | 56.Demote DC     |                                       |"
+echo "   | 53.Seize DNS Role         |                                                          |"
+echo "   | ------------------------  |                                                          |"
+echo "   | 82.Show Roles             |                                                          |"
 echo "   |--------------------------------------------------------------------------------------|"
 echo "   | Domain Settings           | Troubleshooting & Maintenance                            |"
 echo "   |--------------------------------------------------------------------------------------|"
@@ -108,8 +110,8 @@ echo ""
 echo "::Set Expiration::"
 echo "------------------"
 CHOICE=$(whiptail --title "Set Expiration" --radiolist "Choose:"     10 25 5 \
-	"SetExpiration" "" on \
-	"NoExpiry" "" off 3>&1 1>&2 2>&3)
+»···"SetExpiration" "" on \
+»···"NoExpiry" "" off 3>&1 1>&2 2>&3)
 case $CHOICE in
 SetExpiration)
 DOMAIN_USER=$(whiptail --title "User UserName" --inputbox "Please enter the Username" 10 60  3>&1 1>&2 2>&3)
@@ -215,7 +217,7 @@ echo ""
 echo "::Add to DNS record::"
 echo "---------------------"
 choice=$(whiptail --title "Add to DNS record" --radiolist "Choose:"     10 25 5 \
-	"A" "" on 3>&1 1>&2 2>&3)
+»···"A" "" on 3>&1 1>&2 2>&3)
 case $choice in
 A)
 RECORD_NAME=$(whiptail --title "Record Name" --inputbox "Please enter the Record Name" 10 60  3>&1 1>&2 2>&3)
@@ -248,11 +250,186 @@ samba-tool dns query $SERVER $ZONE @ ALL -U administrator
 pause
 }
 
+fsmo_role_transfer(){
+echo ""
+echo "::FSMO Role Transfer::"
+echo "----------------------"
+choice=$(whiptail --title "Select the FSMO Role to transfer" --radiolist "Choose:"    10 50 5 \
+    "Schema Master Role" "" "Schema Master Role" \
+    "Infrastructure Master Role" "" "Infrastructure Master Role" \
+    "Rid Master Role" "" "Rid Master Role" \
+    "Pdc Master Role" "" "Pdc Master Role" \
+    "Domain Naming Master Role" "" "Domain Naming Master Role" 3>&1 1>&2 2>&3)
+case $choice in
+    "Schema Master Role")
+        echo ""
+        echo "Schema Master Role Owner"
+        echo "------------------------"
+        samba-tool fsmo show |grep "SchemaMasterRole" |cut -d "," -f2
+        echo ""
+        samba-tool fsmo transfer --role=schema
+    ;;
+    "Infrastructure Master Role")
+        echo ""
+        echo "Infrastructure Master Role Owner"
+        echo "--------------------------------"
+        samba-tool fsmo show |grep "InfrastructureMasterRole" |cut -d "," -f2
+        echo ""
+        samba-tool fsmo transfer --role=infrastructure
+    ;;
+    "Rid Master Role")
+        echo ""
+        echo "Rid Master Role Owner"
+        echo "---------------------"
+        samba-tool fsmo show |grep "RidAllocationMasterRole" |cut -d "," -f2
+        echo ""
+        samba-tool fsmo transfer --role=rid
+    ;;
+    "Pdc Master Role")
+        echo ""
+        echo "Pdc Master Role"
+        echo "---------------"
+        samba-tool fsmo show |grep "PdcEmulationMasterRole" |cut -d "," -f2
+        echo ""
+        samba-tool fsmo transfer --role=pdc
+    ;;
+    "Domain Naming Master Role")
+        echo ""
+        echo "Domain Naming Master Role"
+        echo "-------------------------"
+        samba-tool fsmo show |grep "DomainNamingMasterRole" |cut -d "," -f2
+        echo ""
+        samba-tool fsmo transfer --role=naming
+    ;;
+    *)
+    ;;
+esac
+pause
+}
+
+function fsmo_role_seize(){
+echo ""
+echo "::FSMO Role Transfer::"
+echo "----------------------"
+choice=$(whiptail --title "Select the FSMO Role to transfer" --radiolist "Choose:"    10 50 5 \
+    "Schema Master Role" "" "Schema Master Role" \
+    "Infrastructure Master Role" "" "Infrastructure Master Role" \
+    "Rid Master Role" "" "Rid Master Role" \
+    "Pdc Master Role" "" "Pdc Master Role" \
+    "Domain Naming Master Role" "" "Domain Naming Master Role" 3>&1 1>&2 2>&3)
+case $choice in
+    "Schema Master Role")
+        echo ""
+        echo "Schema Master Role Owner"
+        echo "------------------------"
+        samba-tool fsmo show |grep "SchemaMasterRole" |cut -d "," -f2
+        echo ""
+        samba-tool fsmo seize --role=schema
+    ;;
+    "Infrastructure Master Role")
+        echo ""
+        echo "Infrastructure Master Role Owner"
+        echo "--------------------------------"
+        samba-tool fsmo show |grep "InfrastructureMasterRole" |cut -d "," -f2
+        echo ""
+        samba-tool fsmo seize --role=infrastructure
+    ;;
+    "Rid Master Role")
+        echo ""
+        echo "Rid Master Role Owner"
+        echo "---------------------"
+        samba-tool fsmo show |grep "RidAllocationMasterRole" |cut -d "," -f2
+        echo ""
+        samba-tool fsmo seize --role=rid
+    ;;
+    "Pdc Master Role")
+        echo ""
+        echo "Pdc Master Role"
+        echo "---------------"
+        samba-tool fsmo show |grep "PdcEmulationMasterRole" |cut -d "," -f2
+        echo ""
+        samba-tool fsmo seize --role=pdc
+    ;;
+    "Domain Naming Master Role")
+        echo ""
+        echo "Domain Naming Master Role"
+        echo "-------------------------"
+        samba-tool fsmo show |grep "DomainNamingMasterRole" |cut -d "," -f2
+        echo ""
+        samba-tool fsmo seize --role=naming
+    ;;
+    *)
+    ;;
+esac
+pause
+}
+
+function dns_role_seize(){
+echo ""
+echo "::DNS Role Seize::"
+echo "----------------------"
+choice=$(whiptail --title "Select the DNS Role" --radiolist "Choose:"    10 50 5 \
+    "Domain DNS Zone Master Role" "" "Domain DNS Zone Master Role" \
+    "Forest DNS Zone Master Role" "" "Forest DNS Zone Master Role" 3>&1 1>&2 2>&3)
+case $choice in
+    "Domain DNS Zone Master Role")
+        echo ""
+        echo "Domain DNS Zone Master Role Owner"
+        echo "---------------------------------"
+        samba-tool fsmo show |grep "DomainDnsZonesMasterRole" |cut -d "," -f2
+        echo ""
+        echo "cf. DNS Management Documention"
+        echo ""
+    ;;
+    "Forest DNS Zone Master Role")
+        echo ""
+        echo "Forest DNS Zone Master Role Owner"
+        echo "---------------------------------"
+        samba-tool fsmo show |grep "ForestDnsZonesMasterRole" |cut -d "," -f2
+        echo ""
+        echo "cf. DNS Management Documention"
+        echo ""
+    ;;
+    *)
+    ;;
+esac
+pause
+}
+
+function show_fsmo_roles(){
+echo ""
+	echo "::FSMO Roles of DC's::"
+	echo "----------------------"
+	samba-tool fsmo show
+	pause
+}
+
 function show_dc_host(){
 echo ""
 echo "::DC Host List::"
 echo "---------------"
 samba-tool ou listobjects OU="Domain Controllers" |cut -d "," -f1
+pause
+}
+
+function demote_dc_host(){
+echo ""
+echo "::Demote DC Host::"
+echo "------------------"
+choice=$(whiptail --title "Demote DC" --radiolist "Choose:"     10 25 5 \
+        "This Host" "" "This Host" \
+	"Remote Host" "" "Remote Host" 3>&1 1>&2 2>&3)
+case $choice in
+    "This Host")
+    samba-tool domain demote -U Administrator
+    ;;
+    "Remote Host")
+    DCNAME=$(whiptail --title "DC Name" --inputbox "Please enter the DC Name for demote" 10 60  3>&1 1>&2 2>&3)
+    samba-tool domain demote --remove-other-dead-server=$DCNAME
+    ;;
+    *)
+    ;;
+esac
 pause
 }
 
@@ -332,13 +509,6 @@ echo ""
 	pause
 }
 
-function show_fsmo_roles(){
-echo ""
-	echo "::FSMO Roles of DC's::"
-	echo "----------------------"
-	samba-tool fsmo show
-	pause
-}
 
 function show_processes(){
 echo ""
@@ -374,33 +544,32 @@ function dns_status(){
 }
 
 function about_of(){
-	echo ""
-	echo "---------------------------------------------------------------------------------------------------"
-	echo "::..About of SambaAD-tui..:: - v2 -"
-	echo "---------------------------------------------------------------------------------------------------"
-	echo "SambAD-tui provides a Text User Interface for Samba Active Directory"
-	echo "This application in used on the Active Directory Server e.g.DC1"
-	echo "---------------------------------------------------------------------------------------------------"
-	echo "The following lines writed the current versions features and the items planned for future releases."
-	echo ""
-	echo "Current Features;
-	- User Management
-	- Group Management
-	- DNS Management
-	- Settings(password length,complexity,age)
-	- Maintenance and Troubleshooting menüs"
-	echo ""
+    echo ""
+    echo "---------------------------------------------------------------------------------------------------"
+    echo "::..About of SambaAD-tui..:: - v2 -"
+    echo "---------------------------------------------------------------------------------------------------"
+    echo "SambAD-tui provides a Text User Interface for Samba Active Directory"
+    echo "This application in used on the Active Directory Server e.g.DC1"
+    echo "---------------------------------------------------------------------------------------------------"
+    echo "Current Features;
+    - User Management
+    - Group Management
+    - DNS Management
+    - FSMO and DNS Role Management
+    - DC Management
+    - Settings(password length,complexity,age)
+    - Maintenance and Troubleshooting menüs"
+    echo ""
 	echo "Planning;
-	- Managing other DNS record
+    - Managing other DNS record
 	- Managing more than one ZONE
 	- Managing OU
-	- Managing FSMO Roles
-	- Working with more than on DC
 	- Managing Group Policy"
 	echo ""
 	echo "---------------------------------------------------------------------------------------------------"
 	echo "Changelog;
-	listening ports, DNS status, DNS Query, Replication Status menus added for domain environment controls"
+    v2   : FSMO roles management Menu, DC Management Menu
+    v1.1 : listening ports, DNS status, DNS Query, Replication Status menus added for domain environment controls"
 	pause
 }
 
@@ -431,7 +600,11 @@ case $c in
 31)add_dns_record ;;
 32)del_dns_record ;;
 33)list_dns_records ;;
+51)fsmo_role_transfer ;;
+52)fsmo_role_seize ;;
+53)dns_role_seize ;;
 55)show_dc_host ;;
+56)demote_dc_host ;;
 71)show_pass_settings ;;
 72)set_pass_length ;;
 73)set_pass_history_length ;;
