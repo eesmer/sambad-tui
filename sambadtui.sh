@@ -580,7 +580,7 @@ function query_dns_all(){
 }
 
 function logviewer(){
-        LOGFILE=$(cat /etc/samba/smb.conf | grep "log file" | cut -d "=" -f2)
+        LOGFILE=$(cat /etc/samba/smb.conf | grep "log file" | cut -d "=" -f2 | xargs)
         cat "$LOGFILE"
         pause
 }
