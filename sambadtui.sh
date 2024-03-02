@@ -627,6 +627,7 @@ case $c in
 86)listening_ports ;;
 87)dns_status ;;
 88)query_dns_all ;;
+90)logviewer ;;
 99)exit 0 ;;
 *)
 echo "Please select from the menu numbers"
