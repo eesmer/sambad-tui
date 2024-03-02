@@ -579,6 +579,12 @@ function query_dns_all(){
 	pause
 }
 
+function logviewer(){
+        LOGFILE=$(cat /etc/samba/smb.conf | grep "log file" | cut -d "=" -f2)
+        cat "$LOGFILE"
+        pause
+}
+
 function read_input(){
 local c
 read -p "You can choose from the menu numbers " c
