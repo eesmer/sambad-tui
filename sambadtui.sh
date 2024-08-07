@@ -221,6 +221,14 @@ OU_NAME=$(whiptail --title "Create a new OU" --inputbox "Please enter the OU Nam
 pause
 }
 
+function ou_list() {
+echo ""
+echo "::OU List::"
+echo "--------------------------"
+samba-tool ou list
+pause
+}
+
 function add_dns_record(){
 echo ""
 echo "::Add to DNS record::"
