@@ -212,7 +212,7 @@ samba-tool group listmembers $GROUP_NAME
 pause
 }
 
-function ou_create() {
+function create_ou() {
 echo ""
 echo "::Create a new OU::"
 echo "--------------------------"
@@ -616,6 +616,7 @@ case $c in
 15)group_list ;;
 16)group_member_list ;;
 21)create_ou ;;
+23)ou_list ;;
 31)add_dns_record ;;
 32)del_dns_record ;;
 33)list_dns_records ;;
