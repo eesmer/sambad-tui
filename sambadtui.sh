@@ -212,6 +212,15 @@ samba-tool group listmembers $GROUP_NAME
 pause
 }
 
+function ou_create() {
+echo ""
+echo "::Create a new OU::"
+echo "--------------------------"
+OU_NAME=$(whiptail --title "Create a new OU" --inputbox "Please enter the OU Name" 10 60  3>&1 1>&2 2>&3)
+
+pause
+}
+
 function add_dns_record(){
 echo ""
 echo "::Add to DNS record::"
@@ -606,6 +615,7 @@ case $c in
 14)remove_member_group ;;
 15)group_list ;;
 16)group_member_list ;;
+21)create_ou ;;
 31)add_dns_record ;;
 32)del_dns_record ;;
 33)list_dns_records ;;
