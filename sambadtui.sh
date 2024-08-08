@@ -217,7 +217,7 @@ echo ""
 echo "::Create a new OU::"
 echo "--------------------------"
 OU_NAME=$(whiptail --title "Create a new OU" --inputbox "Please enter the OU Name" 10 60  3>&1 1>&2 2>&3)
-
+samba-tool ou add OU=$OU_NAME
 pause
 }
 
