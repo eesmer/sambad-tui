@@ -221,6 +221,15 @@ samba-tool ou add OU=$OU_NAME
 pause
 }
 
+function delete_ou() {
+echo ""
+echo "::Delete OU::"
+echo "--------------------------"
+OU_NAME=$(whiptail --title "Delete OU" --inputbox "Please enter the OU Name" 10 60  3>&1 1>&2 2>&3)
+samba-tool ou delete OU=$OU_NAME
+pause
+}
+
 function ou_list() {
 echo ""
 echo "::OU List::"
@@ -624,6 +633,7 @@ case $c in
 15)group_list ;;
 16)group_member_list ;;
 21)create_ou ;;
+22)delete_ou ;;
 23)ou_list ;;
 31)add_dns_record ;;
 32)del_dns_record ;;
