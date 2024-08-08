@@ -7,6 +7,9 @@ fi
 if ! [ -x "$(command -v netstat)" ]; then
 apt -y install net-tools
 fi
+if ! [ -x "$(command -v nmap)" ]; then
+apt -y install nmap
+fi
 
 SERVER=$(ip r |grep link |grep src |cut -d'/' -f2 |cut -d'c' -f3 |cut -d' ' -f2)
 ZONE=$(samba-tool domain info $SERVER |grep Domain |cut -d':' -f2 |cut -d' ' -f2)
@@ -560,7 +563,8 @@ function replication_status(){
 }
 
 function listening_ports(){
-	netstat -tulanp| egrep "ntp|bind|named|samba|?mbd"
+	#netstat -tulanp| egrep "ntp|bind|named|samba|?mbd"
+	nmap 127.0.0.1
 	pause
 }
 
