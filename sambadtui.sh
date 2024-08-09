@@ -33,7 +33,7 @@ echo "   | 1.Create User             | 11.Create Group  | 21.Create OU       | 3
 echo "   | 2.Delete User             | 12.Delete Group  | 22.Delete OU       | 32.Delete DNS Record  |"
 echo "   | 3.Disable/Enable User     | 13.Add Member    | 23.Move User to OU | 33.DNS Records List   |"
 echo "   | 4.Set Expiration          | 14.Remove Member | 24.OU List                                 |"
-echo "   | 5.Change Password         | 15.Group List    |                                            |"
+echo "   | 5.Change Password         | 15.Group List    | 25.Rename OU                               |"
 echo "   | 6.Change Pass.Next Logon  | 16 Member List   |                                            |"
 echo "   | 7.User List               |                  |                                            |"
 echo "   |-------------------------------------------------------------------------------------------|"
@@ -251,6 +251,19 @@ echo ""
 echo "::OU List::"
 echo "--------------------------"
 samba-tool ou list
+pause
+}
+
+function rename_ou() {
+echo ""
+echo "::Rename OU::"
+echo "--------------------------"
+OU_NAME=$(whiptail --title "OU Name" --inputbox "Please enter the OU Name" 10 60  3>&1 1>&2 2>&3)
+NEW_OU_NAME=$(whiptail --title "OU Name" --inputbox "Please enter the New OU Name" 10 60  3>&1 1>&2 2>&3)
+samba-tool ou rename OU="$OU_NAME" OU="$NEW_OU_NAME"
+echo -e
+echo "OU List grep $NEW_OU_NAME"
+samba-tool ou list | grep "$NEW_OU_NAME"
 pause
 }
 
@@ -653,6 +666,7 @@ case $c in
 22)delete_ou ;;
 23)move_user_ou ;;
 24)ou_list ;;
+25)rename_ou ;;
 31)add_dns_record ;;
 32)del_dns_record ;;
 33)list_dns_records ;;
