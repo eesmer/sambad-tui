@@ -241,6 +241,8 @@ DOMAIN_USER=$(whiptail --title "User UserName" --inputbox "Please enter the User
 OU_NAME=$(whiptail --title "OU Name" --inputbox "Please enter the OU Name" 10 60  3>&1 1>&2 2>&3)
 DCNAME1=$(samba-tool domain info $SERVER | grep "Domain" | cut -d ":" -f2 | cut -d "." -f1 | xargs)
 DCNAME2=$(samba-tool domain info $SERVER | grep "Domain" | cut -d ":" -f2 | cut -d "." -f2 | xargs)
+samba-tool user move $DOMAIN_USER "OU=$OU_NAME,DC=$DCNAME1,DC=$DCNAME2"
+echo -e
 pause
 }
 
