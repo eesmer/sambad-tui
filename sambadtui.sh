@@ -24,37 +24,37 @@ read -p "$message" readEnterKey
 
 function show_menu(){
 date
-echo "   |--------------------------------------------------------------------------------------|"
-echo "   | SambaAD-tui v2                                                                       |"
-echo "   |--------------------------------------------------------------------------------------|"
-echo "   | User Management           | Group Management | OU Management | DNS Management        |"
-echo "   |--------------------------------------------------------------------------------------|"
-echo "   | 1.Create User             | 11.Create Group  | 21.Create OU  | 31.Add DNS Record     |"
-echo "   | 2.Delete User             | 12.Delete Group  | 22.Delete OU  | 32.Delete DNS Record  |"
-echo "   | 3.Disable/Enable User     | 13.Add Member    | 23 OU List    | 33.DNS Records List   |"
-echo "   | 4.Set Expiration          | 14.Remove Member |                                       |"
-echo "   | 5.Change Password         | 15.Group List    |                                       |"
-echo "   | 6.Change Pass.Next Logon  | 16 Member List   |                                       |"
-echo "   | 7.User List               |                  |                                       |"
-echo "   |--------------------------------------------------------------------------------------|"
-echo "   | FSMO & Role Management    | DC Management    | LOG Viewer                            |"
-echo "   |--------------------------------------------------------------------------------------|"
-echo "   | 51.Transfer FSMO Role     | 55.Show DC Hosts | 90.LOG Viewer                         |"
-echo "   | 52.Seize FSMO Role        | 56.Demote DC     |                                       |"
-echo "   | 53.Seize DNS Role         |                                                          |"
-echo "   | ------------------------  |                                                          |"
-echo "   | 82.Show Roles             |                                                          |"
-echo "   |--------------------------------------------------------------------------------------|"
-echo "   | Domain Settings           | Troubleshooting & Maintenance                            |"
-echo "   |--------------------------------------------------------------------------------------|"
-echo "   | 71.Show Password Settings | 81.Database Check   86.Listening Ports                   |"
-echo "   | 72.Set Password Length    | 82.Show FSMO Roles  87.DNS Status                        |"
-echo "   | 73.Set Password History   | 83.Show Processes   88.Query DNS Records                 |"
-echo "   | 74.Set Password Age       | 84.Domain Info                                           |"
-echo "   | 75.Password Complexity    | 85.Repl.Status                                           |"
-echo "   |--------------------------------------------------------------------------------------|"
-echo "   | 99.Exit | 0.About                                                                    |"
-echo "   |--------------------------------------------------------------------------------------|"
+echo "   |-------------------------------------------------------------------------------------------|"
+echo "   | SambaAD-tui v2                                                                            |"
+echo "   |-------------------------------------------------------------------------------------------|"
+echo "   | User Management           | Group Management | OU Management      | DNS Management        |"
+echo "   |-------------------------------------------------------------------------------------------|"
+echo "   | 1.Create User             | 11.Create Group  | 21.Create OU       | 31.Add DNS Record     |"
+echo "   | 2.Delete User             | 12.Delete Group  | 22.Delete OU       | 32.Delete DNS Record  |"
+echo "   | 3.Disable/Enable User     | 13.Add Member    | 23.Move User to OU | 33.DNS Records List   |"
+echo "   | 4.Set Expiration          | 14.Remove Member | 24.OU List                                 |"
+echo "   | 5.Change Password         | 15.Group List    |                                            |"
+echo "   | 6.Change Pass.Next Logon  | 16 Member List   |                                            |"
+echo "   | 7.User List               |                  |                                            |"
+echo "   |-------------------------------------------------------------------------------------------|"
+echo "   | FSMO & Role Management    | DC Management    | LOG Viewer                                 |"
+echo "   |-------------------------------------------------------------------------------------------|"
+echo "   | 51.Transfer FSMO Role     | 55.Show DC Hosts | 90.LOG Viewer                              |"
+echo "   | 52.Seize FSMO Role        | 56.Demote DC     |                                            |"
+echo "   | 53.Seize DNS Role         |                                                               |"
+echo "   | ------------------------  |                                                               |"
+echo "   | 82.Show Roles             |                                                               |"
+echo "   |-------------------------------------------------------------------------------------------|"
+echo "   | Domain Settings           | Troubleshooting & Maintenance                                 |"
+echo "   |-------------------------------------------------------------------------------------------|"
+echo "   | 71.Show Password Settings | 81.Database Check   86.Listening Ports                        |"
+echo "   | 72.Set Password Length    | 82.Show FSMO Roles  87.DNS Status                             |"
+echo "   | 73.Set Password History   | 83.Show Processes   88.Query DNS Records                      |"
+echo "   | 74.Set Password Age       | 84.Domain Info                                                |"
+echo "   | 75.Password Complexity    | 85.Repl.Status                                                |"
+echo "   |-------------------------------------------------------------------------------------------|"
+echo "   | 99.Exit | 0.About                                                                         |"
+echo "   |-------------------------------------------------------------------------------------------|"
 }
 
 function create_user(){
@@ -230,6 +230,17 @@ echo "::Delete OU::"
 echo "--------------------------"
 OU_NAME=$(whiptail --title "Delete OU" --inputbox "Please enter the OU Name" 10 60  3>&1 1>&2 2>&3)
 samba-tool ou delete OU=$OU_NAME
+pause
+}
+
+function move_user_ou() {
+echo ""
+echo "::Move User to OU::"
+echo "--------------------------"
+DOMAIN_USER=$(whiptail --title "User UserName" --inputbox "Please enter the Username" 10 60  3>&1 1>&2 2>&3)
+OU_NAME=$(whiptail --title "OU Name" --inputbox "Please enter the OU Name" 10 60  3>&1 1>&2 2>&3)
+DCNAME1=$(samba-tool domain info $SERVER | grep "Domain" | cut -d ":" -f2 | cut -d "." -f1 | xargs)
+DCNAME2=$(samba-tool domain info $SERVER | grep "Domain" | cut -d ":" -f2 | cut -d "." -f2 | xargs)
 pause
 }
 
@@ -638,7 +649,8 @@ case $c in
 16)group_member_list ;;
 21)create_ou ;;
 22)delete_ou ;;
-23)ou_list ;;
+23)move_user_ou ;;
+24)ou_list ;;
 31)add_dns_record ;;
 32)del_dns_record ;;
 33)list_dns_records ;;
