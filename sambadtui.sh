@@ -34,7 +34,7 @@ echo "   | 2.Delete User             | 12.Delete Group  | 22.Delete OU       | 3
 echo "   | 3.Disable/Enable User     | 13.Add Member    | 23.Move User to OU | 33.DNS Records List   |"
 echo "   | 4.Set Expiration          | 14.Remove Member | 24.OU List                                 |"
 echo "   | 5.Change Password         | 15.Group List    | 25.Rename OU                               |"
-echo "   | 6.Change Pass.Next Logon  | 16 Member List   |                                            |"
+echo "   | 6.Change Pass.Next Logon  | 16.Member List   |                                            |"
 echo "   | 7.User List               |                  |                                            |"
 echo "   |-------------------------------------------------------------------------------------------|"
 echo "   | FSMO & Role Management    | DC Management    | LOG Viewer                                 |"
