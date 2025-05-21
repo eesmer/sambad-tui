@@ -1,5 +1,5 @@
 #!/bin/bash
-#buildnumber:08082024-07:00
+#buildnumber:21052025
 
 if ! [ -x "$(command -v whiptail)" ]; then
 apt -y install whiptail
