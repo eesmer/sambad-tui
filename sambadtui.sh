@@ -70,7 +70,7 @@ echo "   | 73.Set Password History   | 83.Show Processes   88.Query DNS Records 
 echo "   | 74.Set Password Age       | 84.Domain Info                                                |"
 echo "   | 75.Password Complexity    | 85.Repl.Status                                                |"
 echo "   |-------------------------------------------------------------------------------------------|"
-echo "   | 99.Exit | 0.About                                                                         |"
+echo "   | ${BOLD}${RED}${UNDERLINE}99.Exit${RESET} | 0.About                                                                         |"
 echo "   |-------------------------------------------------------------------------------------------|"
 }
 
