@@ -663,7 +663,7 @@ function logviewer(){
 
 function read_input(){
 local c
-read -p "You can choose from the menu numbers " c
+read -p "${BOLD}${WHITE}You can choose from the menu numbers${RESET} " c
 case $c in
 0)about_of ;;
 1)create_user ;;
