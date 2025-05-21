@@ -42,7 +42,7 @@ read -p "$message" readEnterKey
 function show_menu(){
 date
 echo "   |-------------------------------------------------------------------------------------------|"
-echo "   | SambaAD-tui v2                                                                            |"
+print_section "     SambaAD-tui v2 " "$CYAN"
 echo "   |-------------------------------------------------------------------------------------------|"
 echo "   | User Management           | Group Management | OU Management      | DNS Management        |"
 echo "   |-------------------------------------------------------------------------------------------|"
