@@ -11,6 +11,17 @@ if ! [ -x "$(command -v nmap)" ]; then
 apt -y install nmap
 fi
 
+RESET=$(tput sgr0)
+BOLD=$(tput bold)
+UNDERLINE=$(tput smul)
+RED=$(tput setaf 1)
+GREEN=$(tput setaf 2)
+YELLOW=$(tput setaf 3)
+BLUE=$(tput setaf 4)
+MAGENTA=$(tput setaf 5)
+CYAN=$(tput setaf 6)
+WHITE=$(tput setaf 7)
+
 SERVER=$(ip r |grep link |grep src |cut -d'/' -f2 |cut -d'c' -f3 |cut -d' ' -f2)
 ZONE=$(samba-tool domain info $SERVER |grep Domain |cut -d':' -f2 |cut -d' ' -f2)
 
