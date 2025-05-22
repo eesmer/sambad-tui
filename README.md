@@ -4,7 +4,7 @@ Sambadtui, provides a Text User Interface for Samba Active Directory.
 <br> This application in used on the Active Directory Server.
 
 Sambadtui, does not install Active Directory. You can run on the existing installation. (e.g.DC1)<br>
-For a new Samba AD installation
+[For a new Samba AD installation](https://github.com/eesmer/DebianDC)
 
 <br>
 You can look at the DebianDC repository for Active Directory setup and management via GUI.<br>
