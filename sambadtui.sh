@@ -681,6 +681,7 @@ function autoreport(){
                 DNS_BACKEND="Samba Internal DNS"
         fi
 
+        echo "${BOLD}${GREEN}${UNDERLINE}=== Samba Active Directory Environment Control & Report ===${RESET}"
         echo "Domain Realm (REALM): $REALM" #>> $LOGFILE
         echo "NetBIOS (DOMAIN): $DOMAIN"
         echo "DNS Backend: $DNS_BACKEND"
