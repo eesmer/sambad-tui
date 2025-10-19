@@ -674,7 +674,17 @@ function autoreport(){
         fi
 
         DOMAIN=$(echo $REALM | cut -d "." -f1)
-	
+
+        if grep -q "server services = -dns" $REALM_FILE; then
+                DNS_BACKEND="BIND9 DLZ"
+        else
+                DNS_BACKEND="Samba Internal DNS"
+        fi
+
+        echo "Domain Realm (REALM): $REALM" #>> $LOGFILE
+        echo "NetBIOS (DOMAIN): $DOMAIN"
+        echo "DNS Backend: $DNS_BACKEND"
+
 	pause
 }
 
