@@ -685,6 +685,7 @@ function autoreport(){
         echo "Domain Realm (REALM): $REALM" #>> $LOGFILE
         echo "NetBIOS (DOMAIN): $DOMAIN"
         echo "DNS Backend: $DNS_BACKEND"
+	echo -e
 
 	pause
 }
