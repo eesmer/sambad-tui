@@ -672,6 +672,10 @@ function autoreport(){
                 echo -e "${FAILMARK} Realm info Not Found in SMB.CONF" | tee -a $LOGFILE
                 exit 1
         fi
+
+        DOMAIN=$(echo $REALM | cut -d "." -f1)
+	
+	pause
 }
 
 function read_input(){
