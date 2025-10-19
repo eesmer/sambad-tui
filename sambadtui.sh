@@ -706,6 +706,7 @@ case $c in
 87)dns_status ;;
 88)query_dns_all ;;
 89)logviewer ;;
+90)autoreport ;;
 99)exit 0 ;;
 *)
 echo "Please select from the menu numbers"
