@@ -661,6 +661,19 @@ function logviewer(){
         pause
 }
 
+function autoreport(){
+        CHECKMARK="${GREEN}✔ SUCCESS${NOCOL}"
+        FAILMARK="${RED}✘ FAIL${NOCOL}"
+        REALM_FILE="/etc/samba/smb.conf"
+        LOGFILE="/var/log/samba-ad-check.log"
+        echo "--- Samba AD Environment Control Logs: $(date) ---" > $LOGFILE
+        REALM=$(grep -E 'realm\s+=' $REALM_FILE | awk '{print $3}')
+        if [ -z "$REALM" ]; then
+                echo -e "${FAILMARK} Realm info Not Found in SMB.CONF" | tee -a $LOGFILE
+                exit 1
+        fi
+}
+
 function read_input(){
 local c
 read -p "${BOLD}${WHITE}You can choose from the menu numbers${RESET} " c
