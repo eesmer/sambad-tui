@@ -653,7 +653,7 @@ function query_dns_all(){
 }
 
 function logviewer(){
-        LOGFILE=$(cat /etc/samba/smb.conf | grep "log file" | cut -d "=" -f2 | xargs)
+	LOGFILE=$(grep -E '^\s*log file\s*=' /etc/samba/smb.conf | sed -E 's/^\s*log file\s*=\s*//' | xargs 2>/dev/null)
         cat "$LOGFILE"
         echo ""
         echo "----------------------------------------------------------------------- log file showed from sambadtui -----------------------------------------------------------------------"
