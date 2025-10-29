@@ -28,7 +28,7 @@ print_section() {
   echo "${BOLD}${color}${title}${RESET}"
 }
 
-SERVER=$(ip r |grep link |grep src |cut -d'/' -f2 |cut -d'c' -f3 |cut -d' ' -f2)
+SERVER=$(ip route get 8.8.8.8 | awk '{for(i=1;i<=NF;i++) if($i=="src") print $(i+1)}' | head -n 1)
 ZONE=$(samba-tool domain info $SERVER |grep Domain |cut -d':' -f2 |cut -d' ' -f2)
 
 samba-tool domain passwordsettings set --min-pwd-age=0 # for Password_Change_Next_Logon to work after create user
