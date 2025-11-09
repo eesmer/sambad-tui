@@ -22,12 +22,6 @@ MAGENTA=$(tput setaf 5)
 CYAN=$(tput setaf 6)
 WHITE=$(tput setaf 7)
 
-print_section() {
-  local title="$1"
-  local color="$2"
-  echo "${BOLD}${color}${title}${RESET}"
-}
-
 SERVER=$(ip route get 8.8.8.8 | awk '{for(i=1;i<=NF;i++) if($i=="src") print $(i+1)}' | head -n 1)
 ZONE=$(samba-tool domain info $SERVER |grep Domain |cut -d':' -f2 |cut -d' ' -f2)
 
@@ -42,7 +36,7 @@ read -p "$message" readEnterKey
 function show_menu(){
 date
 echo "   |-------------------------------------------------------------------------------------------|"
-print_section "     SambaAD-tui v2 " "$CYAN"
+echo "    ${BOLD}${CYAN}SambaAD-tui v2${RESET}"
 echo "   |-------------------------------------------------------------------------------------------|"
 echo "   | User Management           | Group Management  | OU Management      | DNS Management       |"
 echo "   |-------------------------------------------------------------------------------------------|"
