@@ -31,6 +31,15 @@ ZONE=$(samba-tool domain info $SERVER |grep Domain |cut -d':' -f2 |cut -d' ' -f2
 UI_PUSH() { tput smcup 2>/dev/null || true; tput civis 2>/dev/null || true; }
 UI_POP()  { tput cnorm 2>/dev/null || true; tput rmcup 2>/dev/null || true; }
 
+export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS}
+  --height=100%
+  --layout=reverse
+  --border
+  --prompt='> '
+  --marker='* '
+  --cycle
+"
+
 samba-tool domain passwordsettings set --min-pwd-age=0 # for Password_Change_Next_Logon to work after create user
 
 function pause(){
