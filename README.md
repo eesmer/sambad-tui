@@ -14,6 +14,8 @@ If you are interested in this topic; you can have a look at [DebianDC](https://g
 - Version 3 will produce fzf screens and report outputs.
 - V2 will be available until version 3 is completed.
 
+  [SambAD-TUI v3](https://github.com/eesmer/sambad-tui/blob/master/sambadtui-v2.sh)
+
 ---
 
 ## Features
