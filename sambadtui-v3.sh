@@ -196,11 +196,9 @@ pause
 }
 
 function user_list(){
-echo ""
-echo "::User List::"
-echo "-------------"
-samba-tool user list
-pause
+  local U
+  U=$(select_user_fzf) || return
+  user_actions_for "$U"
 }
 
 function create_group(){
