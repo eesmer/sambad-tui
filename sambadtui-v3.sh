@@ -28,6 +28,9 @@ WHITE=$(tput setaf 7)
 SERVER=$(ip route get 8.8.8.8 | awk '{for(i=1;i<=NF;i++) if($i=="src") print $(i+1)}' | head -n 1)
 ZONE=$(samba-tool domain info $SERVER |grep Domain |cut -d':' -f2 |cut -d' ' -f2)
 
+UI_PUSH() { tput smcup 2>/dev/null || true; tput civis 2>/dev/null || true; }
+UI_POP()  { tput cnorm 2>/dev/null || true; tput rmcup 2>/dev/null || true; }
+
 samba-tool domain passwordsettings set --min-pwd-age=0 # for Password_Change_Next_Logon to work after create user
 
 function pause(){
