@@ -9,7 +9,7 @@ Sambadtui, does not install Active Directory. You can run on the existing instal
 You can look at the DebianDC repository for Active Directory setup and management via GUI.<br>
 If you are interested in this topic; you can have a look at [DebianDC](https://github.com/eesmer/DebianDC)
 
-## New
+## News - Coming soon v3
 - A new script file has been created for version 3.
 - Version 3 will produce fzf screens and report outputs.
 - V2 will be available until version 3 is completed.
