@@ -30,6 +30,7 @@ ZONE=$(samba-tool domain info $SERVER |grep Domain |cut -d':' -f2 |cut -d' ' -f2
 
 UI_PUSH() { tput smcup 2>/dev/null || true; tput civis 2>/dev/null || true; }
 UI_POP()  { tput cnorm 2>/dev/null || true; tput rmcup 2>/dev/null || true; }
+FZF_HEADER="=== SambaAD TUI v3 === (ESC: Back)"
 
 export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS}
   --height=100%
