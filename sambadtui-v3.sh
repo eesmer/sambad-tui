@@ -68,7 +68,7 @@ read -p "$message" readEnterKey
 function show_menu(){
 date
 echo "   |-------------------------------------------------------------------------------------------|"
-echo "    ${BOLD}${CYAN}SambaAD-tui v2${RESET}"
+echo "    ${BOLD}${CYAN}SambaAD-tui v3${RESET}"
 echo "   |-------------------------------------------------------------------------------------------|"
 echo "   | User Management           | Group Management  | OU Management      | DNS Management       |"
 echo "   |-------------------------------------------------------------------------------------------|"
