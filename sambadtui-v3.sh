@@ -41,6 +41,22 @@ export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS}
   --cycle
 "
 
+select_user_fzf() {
+  UI_PUSH
+  local sel
+  sel=$(
+    samba-tool user list 2>/dev/null |
+    fzf --header="$FZF_HEADER" \
+        --preview 'samba-tool user show {} 2>/dev/null || echo "(no details)"' \
+        --preview-window=right:60%
+  )
+  local rc=$?
+  ui_pop
+  [ $rc -ne 0 ] && return 1
+  [ -z "$sel" ] && return 1
+  printf '%s\n' "$sel"
+}
+
 samba-tool domain passwordsettings set --min-pwd-age=0 # for Password_Change_Next_Logon to work after create user
 
 function pause(){
