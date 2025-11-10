@@ -10,7 +10,9 @@ You can look at the DebianDC repository for Active Directory setup and managemen
 If you are interested in this topic; you can have a look at [DebianDC](https://github.com/eesmer/DebianDC)
 
 ## New
-A new script file has been created for version 3.
+- A new script file has been created for version 3.
+- Version 3 will produce fzf screens and report outputs.
+- V2 will be available until version 3 is completed.
 
 ---
 
