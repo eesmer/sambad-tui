@@ -500,14 +500,6 @@ echo ""
 	pause
 }
 
-#function show_dc_host(){
-#echo ""
-#echo "::DC Host List::"
-#echo "---------------"
-#samba-tool ou listobjects OU="Domain Controllers" |cut -d "," -f1
-#pause
-#}
-
 browse_dcs() {
   ui_push
   show_dc_host | fzf \
