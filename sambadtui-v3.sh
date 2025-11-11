@@ -518,6 +518,13 @@ browse_dcs() {
 pause
 }
 
+show_dc_host() {
+  samba-tool ou listobjects OU="Domain Controllers" 2>/dev/null \
+    | cut -d ',' -f1 \
+    | sed 's/^CN=//' \
+    | sort -u
+}
+
 function demote_dc_host(){
 echo ""
 echo "::Demote DC Host::"
