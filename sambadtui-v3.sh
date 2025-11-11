@@ -96,8 +96,8 @@ echo "   | 73.Set Password History   | 83.Show Processes | 88.Query DNS Records 
 echo "   | 74.Set Password Age       | 84.Domain Info    | 89.LOG Viewer                             |"
 echo "   | 75.Password Complexity    | 85.Repl.Status    | 90.Auto Control & Report                  |"
 echo "   |-------------------------------------------------------------------------------------------|"
-echo "   | ${BOLD}${RED}${UNDERLINE}99.Exit${RESET} | 0.About                                        |"
-echo "   |-------------------------------------------------------------------------------------------|"
+echo "     ${BOLD}${RED}${UNDERLINE}99.Exit${RESET} | 0.About"
+echo "   ---------------------------------------------------------------------------------------------"
 }
 
 function create_user(){
