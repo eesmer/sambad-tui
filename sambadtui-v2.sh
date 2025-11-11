@@ -4,6 +4,7 @@
 # buildnumber:30102025
 # This script is working successfully.
 # Please follow the v3 version for updates.
+# https://github.com/eesmer/sambad-tui/blob/master/sambadtui-v3.sh
 #----------------------------------------------------------------
 
 if ! [ -x "$(command -v whiptail)" ]; then
