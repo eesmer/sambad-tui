@@ -1,5 +1,10 @@
 #!/bin/bash
-#buildnumber:30102025
+
+#----------------------------------------------------------------
+# buildnumber:30102025
+# This script is working successfully.
+# Please follow the v3 version for updates.
+#----------------------------------------------------------------
 
 if ! [ -x "$(command -v whiptail)" ]; then
 apt -y install whiptail
