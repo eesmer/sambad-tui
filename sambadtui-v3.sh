@@ -500,11 +500,21 @@ echo ""
 	pause
 }
 
-function show_dc_host(){
-echo ""
-echo "::DC Host List::"
-echo "---------------"
-samba-tool ou listobjects OU="Domain Controllers" |cut -d "," -f1
+#function show_dc_host(){
+#echo ""
+#echo "::DC Host List::"
+#echo "---------------"
+#samba-tool ou listobjects OU="Domain Controllers" |cut -d "," -f1
+#pause
+#}
+
+browse_dcs() {
+  ui_push
+  show_dc_host | fzf \
+    --header="$FZF_HEADER" \
+    --preview  'samba-tool drs showrepl {} 2>/dev/null || echo "(no details)"' \
+    --preview-window=right:60%
+  ui_pop
 pause
 }
 
@@ -743,7 +753,7 @@ case $c in
 51)fsmo_role_transfer ;;
 52)fsmo_role_seize ;;
 53)dns_role_seize ;;
-55)show_dc_host ;;
+55)browse_dcs ;;
 56)demote_dc_host ;;
 71)show_pass_settings ;;
 72)set_pass_length ;;
