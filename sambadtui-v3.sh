@@ -51,7 +51,7 @@ select_user_fzf() {
         --preview-window=right:60%
   )
   local rc=$?
-  ui_pop
+  UI_POP
   [ $rc -ne 0 ] && return 1
   [ -z "$sel" ] && return 1
   printf '%s\n' "$sel"
@@ -501,12 +501,12 @@ echo ""
 }
 
 browse_dcs() {
-  ui_push
+  UI_PUSH
   show_dc_host | fzf \
     --header="$FZF_HEADER" \
     --preview  'samba-tool drs showrepl {} 2>/dev/null || echo "(no details)"' \
     --preview-window=right:60%
-  ui_pop
+  UI_POP
 pause
 }
 
