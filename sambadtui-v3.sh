@@ -610,7 +610,7 @@ function db_check(){
 echo ""
 	echo "::DB Check::" 
 	echo "------------"
-	samba-tool dbcheck
+	samba-tool dbcheck --cross-ncs
 	pause
 }
 
