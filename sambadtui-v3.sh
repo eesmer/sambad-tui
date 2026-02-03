@@ -714,6 +714,14 @@ function autoreport(){
                 DNS_BACKEND="Samba Internal DNS"
         fi
 
+	# Replication Control
+	samba-tool drs showrepl > /tmp/showrepl.tmp
+	if grep -q "failed" /tmp/showrepl.tmp; then
+		REPL_STATUS="Critical:Replication errors found!"
+	else
+		REPL_STATUS="Replication check result no errors"
+	fi
+
         echo "${BOLD}${GREEN}${UNDERLINE}=== Samba Active Directory Environment Control & Report ===${RESET}"
         echo "Domain Realm (REALM): $REALM" #>> $LOGFILE
         echo "NetBIOS (DOMAIN): $DOMAIN"
