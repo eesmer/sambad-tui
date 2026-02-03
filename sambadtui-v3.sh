@@ -722,11 +722,15 @@ function autoreport(){
 		REPL_STATUS="Replication check result no errors"
 	fi
 
+	# GPO Control
+	GPO_COUNT=$(samba-tool gpo listall | grep "display name" | wc -l)
+
         echo "${BOLD}${GREEN}${UNDERLINE}=== Samba Active Directory Environment Control & Report ===${RESET}"
         echo "Domain Realm (REALM): $REALM" #>> $LOGFILE
         echo "NetBIOS (DOMAIN): $DOMAIN"
         echo "DNS Backend: $DNS_BACKEND"
 	echo "Replication Check: $REPL_STATUS"
+	echo "GPO Count: $GPO_COUNT"
 	echo -e
 	pause
 }
