@@ -725,7 +725,9 @@ function autoreport(){
 	# GPO Control
 	GPO_COUNT=$(samba-tool gpo listall | grep "display name" | wc -l)
 
-        echo "${BOLD}${GREEN}${UNDERLINE}=== Samba Active Directory Environment Control & Report ===${RESET}"
+        echo -e
+        echo "${GREEN}----------------------------------------------------------------------------------------------${RESET}"
+        echo "${BOLD}${BLUE}${UNDERLINE}=== Samba Active Directory Environment Control & Report ===${RESET}"
         echo "Domain Realm (REALM): $REALM" #>> $LOGFILE
         echo "NetBIOS (DOMAIN): $DOMAIN"
         echo "DNS Backend: $DNS_BACKEND"
