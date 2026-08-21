@@ -1,6 +1,6 @@
 
-# Samba Active Directory -Text User Interface
-Sambadtui, provides a Text User Interface for Samba Active Directory.
+# Samba Active Directory -Terminal User Interface
+Sambadtui, provides a Terminal User Interface for Samba Active Directory.
 <br> This application in used on the Active Directory Server.
 
 Sambadtui, does not install Active Directory. You can run on the existing installation. (e.g.DC1)<br>
