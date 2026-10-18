@@ -80,22 +80,26 @@ echo "   | 5.Change Password         | 15.Group List     | 25.Rename OU         
 echo "   | 6.Change Pass.Next Logon  | 16.Member List    |                                           |"
 echo "   | 7.User List               |                   |                                           |"
 echo "   |-------------------------------------------------------------------------------------------|"
-echo "   | FSMO & Role Management    | DC Management     |                                           |"
+echo "   | FSMO & Role Management    | DC Management     | Domain Settings                           |"
 echo "   |-------------------------------------------------------------------------------------------|"
-echo "   | 51.Transfer FSMO Role     | 55.Show DC Hosts  |                                           |"
-echo "   | 52.Seize FSMO Role        | 56.Demote DC      |                                           |"
-echo "   | 53.Seize DNS Role         |                                                               |"
-echo "   | ------------------------  |                                                               |"
-echo "   | 82.Show Roles             |                                                               |"
+echo "   | 51.Transfer FSMO Role     | 55.Show DC Hosts  | 61.Show Password Settings                 |"
+echo "   | 52.Seize FSMO Role        | 56.Demote DC      | 62.Set Password Length                    |"
+echo "   | 53.Seize DNS Role         |                   | 63.Set Password History                   |"
+echo "   | ------------------------  |                   | 64.Set Password Age                       |"
+echo "   | 82.Show Roles             |                   | 65.Password Complexity                    |"
 echo "   |-------------------------------------------------------------------------------------------|"
-echo "   | Domain Settings           |      Troubleshooting & Maintenance                            |"
+echo "   |                      Troubleshooting & Maintenance & Reporting                            |"
 echo "   |-------------------------------------------------------------------------------------------|"
-echo "   | 71.Show Password Settings | 81.Database Check | 86.Listening Ports                        |"
-echo "   | 72.Set Password Length    | 82.Show FSMO Role | 87.DNS Status                             |"
-echo "   | 73.Set Password History   | 83.Show Processes | 88.Query DNS Records                      |"
-echo "   | 74.Set Password Age       | 84.Domain Info    | 89.LOG Viewer                             |"
-echo "   | 75.Password Complexity    | 85.Repl.Status    |-------------------------------------------|"
-echo "   |                           |                   | 90.Generate Report                        |"
+echo "   | 81.Database Check         | 90.Generate Report                                            |"
+echo "   | 82.Show FSMO Role         |                                                               |"
+echo "   | 83.Show Processes         |                                                               |"
+echo "   | 84.Domain Info            |                                                               |"
+echo "   | 85.Repl.Status            |                                                               |"
+echo "   | ---------------------     |                                                               |"
+echo "   | 86.Listening Ports        |                                                               |"
+echo "   | 87.DNS Status             |                                                               |"
+echo "   | 88.Query DNS Records      |                                                               |"
+echo "   | 89.LOG Viewer             |                                                               |"
 echo "   |-------------------------------------------------------------------------------------------|"
 echo "     ${BOLD}${RED}${UNDERLINE}99.Exit${RESET} | 0.About"
 echo "   ---------------------------------------------------------------------------------------------"
@@ -769,11 +773,11 @@ case $c in
 53)dns_role_seize ;;
 55)browse_dcs ;;
 56)demote_dc_host ;;
-71)show_pass_settings ;;
-72)set_pass_length ;;
-73)set_pass_history_length ;;
-74)set_pass_age ;;
-75)pass_complexity ;;
+61)show_pass_settings ;;
+62)set_pass_length ;;
+63)set_pass_history_length ;;
+64)set_pass_age ;;
+65)pass_complexity ;;
 81)db_check ;;
 82)show_fsmo_roles ;;
 83)show_processes ;;
