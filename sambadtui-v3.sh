@@ -86,7 +86,7 @@ echo "   | 51.Transfer FSMO Role     | 55.Show DC Hosts  | 61.Show Password Sett
 echo "   | 52.Seize FSMO Role        | 56.Demote DC      | 62.Set Password Length                    |"
 echo "   | 53.Seize DNS Role         |                   | 63.Set Password History                   |"
 echo "   | ------------------------  |                   | 64.Set Password Age                       |"
-echo "   | 82.Show Roles             |                   | 65.Password Complexity                    |"
+echo "   | 82.Show Roles             |                   | 65.On/Off Password Complexity             |"
 echo "   |-------------------------------------------------------------------------------------------|"
 echo "   |                      Troubleshooting & Maintenance & Reporting                            |"
 echo "   |-------------------------------------------------------------------------------------------|"
