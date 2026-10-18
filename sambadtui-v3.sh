@@ -699,6 +699,19 @@ function logviewer(){
         pause
 }
 
+function sysvol_check(){
+if SYSVOL_OUTPUT=$(samba-tool ntacl sysvolcheck -d 0 2>&1); then
+    echo "SYSVOL ACL Check Success"
+else
+    SYSVOL_RC=$?
+    printf 'SYSVOL ACL Check Fail Code: %s\n' \
+        "$SYSVOL_RC" >&2
+    printf '%s\n' "$SYSVOL_OUTPUT" >&2
+    echo "This error must be fixed for the GPO to work." >&2
+fi
+
+}
+
 function autoreport(){
         CHECKMARK="${GREEN}✔ SUCCESS${NOCOL}"
         FAILMARK="${RED}✘ FAIL${NOCOL}"
@@ -768,11 +781,11 @@ case $c in
 31)add_dns_record ;;
 32)del_dns_record ;;
 33)list_dns_records ;;
-51)fsmo_role_transfer ;;
-52)fsmo_role_seize ;;
-53)dns_role_seize ;;
-55)browse_dcs ;;
-56)demote_dc_host ;;
+41)fsmo_role_transfer ;;
+42)fsmo_role_seize ;;
+43)dns_role_seize ;;
+45)browse_dcs ;;
+46)demote_dc_host ;;
 61)show_pass_settings ;;
 62)set_pass_length ;;
 63)set_pass_history_length ;;
@@ -788,6 +801,7 @@ case $c in
 88)query_dns_all ;;
 89)logviewer ;;
 90)autoreport ;;
+91)sysvol_check() ;;
 99)exit 0 ;;
 *)
 echo "Please select from the menu numbers"
