@@ -82,17 +82,17 @@ echo "   | 7.User List               |                   |                      
 echo "   |-------------------------------------------------------------------------------------------|"
 echo "   | FSMO & Role Management    | DC Management     | Domain Settings                           |"
 echo "   |-------------------------------------------------------------------------------------------|"
-echo "   | 51.Transfer FSMO Role     | 55.Show DC Hosts  | 61.Show Password Settings                 |"
-echo "   | 52.Seize FSMO Role        | 56.Demote DC      | 62.Set Password Length                    |"
-echo "   | 53.Seize DNS Role         |                   | 63.Set Password History                   |"
-echo "   | ------------------------  |                   | 64.Set Password Age                       |"
-echo "   | 82.Show Roles             |                   | 65.On/Off Password Complexity             |"
+echo "   | 41.Transfer FSMO Role     | 45.Show DC Hosts  | 51.Show Password Settings                 |"
+echo "   | 42.Seize FSMO Role        | 46.Demote DC      | 52.Set Password Length                    |"
+echo "   | 43.Seize DNS Role         |                   | 53.Set Password History                   |"
+echo "   | ------------------------  |                   | 54.Set Password Age                       |"
+echo "   | 82.Show Roles             |                   | 55.On/Off Password Complexity             |"
 echo "   |-------------------------------------------------------------------------------------------|"
 echo "   |                      Troubleshooting & Maintenance & Reporting                            |"
 echo "   |-------------------------------------------------------------------------------------------|"
 echo "   | 81.Database Check         | 90.Generate Report                                            |"
-echo "   | 82.Show FSMO Role         |                                                               |"
-echo "   | 83.Show Processes         |                                                               |"
+echo "   | 82.Show FSMO Role         | ------------------                                            |"
+echo "   | 83.Show Processes         | 91.SYSVOL Check                                               |"
 echo "   | 84.Domain Info            |                                                               |"
 echo "   | 85.Repl.Status            |                                                               |"
 echo "   | ---------------------     |                                                               |"
@@ -786,11 +786,11 @@ case $c in
 43)dns_role_seize ;;
 45)browse_dcs ;;
 46)demote_dc_host ;;
-61)show_pass_settings ;;
-62)set_pass_length ;;
-63)set_pass_history_length ;;
-64)set_pass_age ;;
-65)pass_complexity ;;
+51)show_pass_settings ;;
+52)set_pass_length ;;
+53)set_pass_history_length ;;
+54)set_pass_age ;;
+55)pass_complexity ;;
 81)db_check ;;
 82)show_fsmo_roles ;;
 83)show_processes ;;
