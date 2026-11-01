@@ -27,7 +27,7 @@ If you are interested in this topic; you can have a look at [DebianDC](https://g
 - Maintenance and Troubleshooting (SYSVOL, GPO check and configuration etc.)
 
 ---
-![alt text](doc/sambadtui-screenshot1.png "SambaAD TUI Main Menu")
+![alt text](https://github.com/eesmer/sambad-tui/blob/master/doc/SambAD-TUI-Screenshot.png "SambAD-TUI Main Menu")
 ---
 
 ## Requirements
