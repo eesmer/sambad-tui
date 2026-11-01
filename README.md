@@ -1,20 +1,19 @@
 
-# Samba Active Directory -Terminal User Interface
-Sambadtui, provides a Terminal User Interface for Samba Active Directory.
+# Samba Active Directory - Terminal User Interface
+SambAD-TUI, provides a Terminal User Interface for Samba Active Directory.
 <br> This application in used on the Active Directory Server.
 
-Sambadtui, does not install Active Directory. You can run on the existing installation. (e.g.DC1)<br>
+SambAD-TUI, does not install Active Directory. You can run on the existing installation. (e.g.DC1)<br>
 [For a new Samba AD installation](https://github.com/eesmer/SambaAD-HelperScripts/blob/main/pages/SambaActiveDirectory-Installer.md)
 
 You can look at the DebianDC repository for Active Directory setup and management via GUI.<br>
 If you are interested in this topic; you can have a look at [DebianDC](https://github.com/eesmer/DebianDC)
 
-## News - Coming soon v3
-- A new script file has been created for version 3.
-- Version 3 will produce fzf screens and report outputs.
-- V2 will be available until version 3 is completed.
-
- to browse [SambAD-TUI v3](https://github.com/eesmer/sambad-tui/blob/master/sambadtui-v3.sh)
+## v3.1
+- A new script file has been created for Version 3.
+- Version 3 now integrates with `fzf` interfaces.
+- The Version 3 script should be used instead of the Version 2 script.
+- This version introduces new reporting features, including checks for SYSVOL and GPO.
 
 ---
 
@@ -25,7 +24,7 @@ If you are interested in this topic; you can have a look at [DebianDC](https://g
 - FSMO and DNS Role Management
 - DC Management
 - Settings (password length,complexity,age)
-- Maintenance and Troubleshooting
+- Maintenance and Troubleshooting (SYSVOL, GPO check and configuration etc.)
 
 ---
 ![alt text](doc/sambadtui-screenshot1.png "SambaAD TUI Main Menu")
