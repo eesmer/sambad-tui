@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #----------------------------------------------------------------
-# SambaAD-TUI Script v3.1
+# SambAD-TUI Script v3.1
 # BuildDate:01112026
 # https://github.com/eesmer/sambad-tui
 #----------------------------------------------------------------
@@ -73,7 +73,7 @@ read -p "$message" readEnterKey
 function show_menu(){
 date
 echo "   ---------------------------------------------------------------------------------------------"
-echo "    ${BOLD}${CYAN}SambaAD-tui v3.1${RESET}                                                        "
+echo "    ${BOLD}${CYAN}SambAD-TUI v3.1${RESET}                                                        "
 echo "   |-------------------------------------------------------------------------------------------|"
 echo "   | User Management           | Group Management  | OU Management      | DNS Management       |"
 echo "   |-------------------------------------------------------------------------------------------|"
@@ -729,12 +729,15 @@ function autoreport(){
                 echo -e "${FAILMARK} Realm info Not Found in SMB.CONF" | tee -a $LOGFILE
                 exit 1
         fi
+
         DOMAIN=$(echo $REALM | cut -d "." -f1)
+
         if grep -q "server services = -dns" $REALM_FILE; then
                 DNS_BACKEND="BIND9 DLZ"
         else
                 DNS_BACKEND="Samba Internal DNS"
         fi
+
 	# Replication Control
 	samba-tool drs showrepl > /tmp/showrepl.tmp
 	if grep -q "failed" /tmp/showrepl.tmp; then
@@ -742,8 +745,10 @@ function autoreport(){
 	else
 		REPL_STATUS="Replication check result no errors"
 	fi
+
 	# GPO Control
 	GPO_COUNT=$(samba-tool gpo listall | grep "display name" | wc -l)
+
         echo -e
         echo "${GREEN}----------------------------------------------------------------------------------------------${RESET}"
         echo "${BOLD}${BLUE}${UNDERLINE}=== Samba Active Directory Environment Control & Report ===${RESET}"
