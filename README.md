@@ -35,9 +35,9 @@ It works in Debian environment. Desktop environment is not required.
 
 ## Installation and Usage
 ```sh
-wget https://raw.githubusercontent.com/eesmer/sambad-tui/master/sambadtui.sh
+wget https://raw.githubusercontent.com/eesmer/sambad-tui/master/sambadtui-v3.1.sh
 ```
 ```sh
-bash sambadtui.sh
+bash sambadtui-v3.1.sh
 ```
 Use sambadtui with root user
