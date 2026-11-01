@@ -1,5 +1,10 @@
 #!/bin/bash
-#buildnumber:11112025
+
+#----------------------------------------------------------------
+# SambaAD-TUI Script v3.1
+# BuildDate:01112026
+# https://github.com/eesmer/sambad-tui
+#----------------------------------------------------------------
 
 if ! [ -x "$(command -v whiptail)" ]; then
 	apt-get -y install whiptail
@@ -68,7 +73,7 @@ read -p "$message" readEnterKey
 function show_menu(){
 date
 echo "   ---------------------------------------------------------------------------------------------"
-echo "    ${BOLD}${CYAN}SambaAD-tui v3${RESET}"
+echo "    ${BOLD}${CYAN}SambaAD-tui v3.1${RESET}                                                        "
 echo "   |-------------------------------------------------------------------------------------------|"
 echo "   | User Management           | Group Management  | OU Management      | DNS Management       |"
 echo "   |-------------------------------------------------------------------------------------------|"
@@ -102,7 +107,7 @@ echo "   | 87.DNS Status             |                                          
 echo "   | 88.Query DNS Records      |                                                               |"
 echo "   | 89.LOG Viewer             |                                                               |"
 echo "   |-------------------------------------------------------------------------------------------|"
-echo "     ${BOLD}${RED}${UNDERLINE}99.Exit${RESET} | 0.About"
+echo "     ${BOLD}${RED}${UNDERLINE}99.Exit${RESET} | 0.About                                         "
 echo "   ---------------------------------------------------------------------------------------------"
 }
 
@@ -710,7 +715,7 @@ else
     printf '%s\n' "$SYSVOL_OUTPUT" >&2
     echo "This error must be fixed for the GPO to work." >&2
 fi
-
+pause
 }
 
 function autoreport(){
@@ -724,15 +729,12 @@ function autoreport(){
                 echo -e "${FAILMARK} Realm info Not Found in SMB.CONF" | tee -a $LOGFILE
                 exit 1
         fi
-
         DOMAIN=$(echo $REALM | cut -d "." -f1)
-
         if grep -q "server services = -dns" $REALM_FILE; then
                 DNS_BACKEND="BIND9 DLZ"
         else
                 DNS_BACKEND="Samba Internal DNS"
         fi
-
 	# Replication Control
 	samba-tool drs showrepl > /tmp/showrepl.tmp
 	if grep -q "failed" /tmp/showrepl.tmp; then
@@ -740,10 +742,8 @@ function autoreport(){
 	else
 		REPL_STATUS="Replication check result no errors"
 	fi
-
 	# GPO Control
 	GPO_COUNT=$(samba-tool gpo listall | grep "display name" | wc -l)
-
         echo -e
         echo "${GREEN}----------------------------------------------------------------------------------------------${RESET}"
         echo "${BOLD}${BLUE}${UNDERLINE}=== Samba Active Directory Environment Control & Report ===${RESET}"
@@ -802,7 +802,7 @@ case $c in
 88)query_dns_all ;;
 89)logviewer ;;
 90)autoreport ;;
-91)sysvol_check() ;;
+91)sysvol_check ;;
 99)exit 0 ;;
 *)
 echo "Please select from the menu numbers"
