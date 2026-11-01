@@ -15,6 +15,8 @@ If you are interested in this topic; you can have a look at [DebianDC](https://g
 - The Version 3 script should be used instead of the Version 2 script.
 - This version introduces new reporting features, including checks for SYSVOL and GPO.
 
+[Changelog](https://github.com/eesmer/sambad-tui/blob/master/doc/changelog.md)
+
 ---
 
 ## Features
