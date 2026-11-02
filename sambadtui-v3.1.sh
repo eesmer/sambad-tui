@@ -92,7 +92,7 @@ echo "   | 42.Seize FSMO Role        | 52.Set Password Length                   
 echo "   | 43.Seize DNS Role         | 53.Set Password History                                       |"
 echo "   | -----------------------   | 54.Set Password Age                                           |"
 echo "   | 44.Show DC Hosts          | 55.On/Off Password Complexity                                 |"
-echo "   | 45.Demote DC              | 55.On/Off Password Complexity                                 |"
+echo "   | 45.Demote DC              |                                                               |"
 echo "   |-------------------------------------------------------------------------------------------|"
 echo "   |                      Troubleshooting & Maintenance & Reporting                            |"
 echo "   |-------------------------------------------------------------------------------------------|"
@@ -718,48 +718,110 @@ fi
 pause
 }
 
-function autoreport(){
-        CHECKMARK="${GREEN}✔ SUCCESS${NOCOL}"
-        FAILMARK="${RED}✘ FAIL${NOCOL}"
-        REALM_FILE="/etc/samba/smb.conf"
-        LOGFILE="/var/log/samba-ad-check.log"
-        echo "--- Samba AD Environment Control Logs: $(date) ---" > $LOGFILE
-        REALM=$(grep -E 'realm\s+=' $REALM_FILE | awk '{print $3}')
-        if [ -z "$REALM" ]; then
-                echo -e "${FAILMARK} Realm info Not Found in SMB.CONF" | tee -a $LOGFILE
-                exit 1
-        fi
-
-        DOMAIN=$(echo $REALM | cut -d "." -f1)
-
-        if grep -q "server services = -dns" $REALM_FILE; then
-                DNS_BACKEND="BIND9 DLZ"
-        else
-                DNS_BACKEND="Samba Internal DNS"
-        fi
-
-	# Replication Control
-	samba-tool drs showrepl > /tmp/showrepl.tmp
-	if grep -q "failed" /tmp/showrepl.tmp; then
-		REPL_STATUS="Critical:Replication errors found!"
-	else
-		REPL_STATUS="Replication check result no errors"
-	fi
-
-	# GPO Control
-	GPO_COUNT=$(samba-tool gpo listall | grep "display name" | wc -l)
-
-        echo -e
-        echo "${GREEN}----------------------------------------------------------------------------------------------${RESET}"
-        echo "${BOLD}${BLUE}${UNDERLINE}=== Samba Active Directory Environment Control & Report ===${RESET}"
-        echo "Domain Realm (REALM): $REALM" #>> $LOGFILE
-        echo "NetBIOS (DOMAIN): $DOMAIN"
-        echo "DNS Backend: $DNS_BACKEND"
-	echo "Replication Check: $REPL_STATUS"
-	echo "GPO Count: $GPO_COUNT"
-	echo -e
-	pause
+function general_report(){
+#REALM=$(testparm -s -d 0 --parameter-name='realm' 2>/dev/null)
+DNS_DOMAIN=${REALM,,}
+DC_FQDN=$(hostname -f)
+DNS_DOMAIN_NAME=$(printf '%s\n' "$DNS_DOMAIN")
+KERBEROS_REALM=$(testparm -s -d 0 --parameter-name='realm')
+NETBIOS_DOMAIN_NAME=$(testparm -s -d 0 --parameter-name='workgroup')
+SAMBA_ROLE=$(testparm -s -d 0 --parameter-name='server role')
+FQDN_NAME=$(hostname -f)
+SAMBA_VER=$(samba --version)
+FUNCTION_LEVEL=$(samba-tool domain level show -d 0)
+DC_COUNT=$(dig +short "_ldap._tcp.dc._msdcs.$DNS_DOMAIN" SRV | awk '{print $4}' | sort -u | wc -l)
+DC_LIST=$(dig +short "_ldap._tcp.dc._msdcs.$DNS_DOMAIN" SRV)
+DC_OBJECTS=$(ldbsearch -H /var/lib/samba/private/sam.ldb --cross-ncs '(objectClass=nTDSDSA)' dn)
+FSMO_ROLES=$(samba-tool fsmo show -d 0)
+DC_FSMO=$(samba-tool fsmo show -d 0 | sed -n 's/.*CN=NTDS Settings,CN=\([^,]*\).*/\1/p' | sort | uniq -c)
+DB_CHECK=$(samba-tool dbcheck --cross-ncs -d 0)
+ACL_CHECK=$(samba-tool ntacl sysvolcheck -d 0)
+PASSWORD_POLICY=$(samba-tool domain passwordsettings show -d 0)
+ADDC_SERVICE_ISACTIVE=$(systemctl is-active samba-ad-dc)
+NAMED_SERVICE_ISACTIVE=$(systemctl is-active named)
+CHRONY_SERVICE_ISACTIVE=$(systemctl is-active chrony)
+ADDC_SERVICE_STARTUP=$(systemctl is-enabled samba-ad-dc)
+NAMED_SERVICE_STARTUP=$(systemctl is-enabled named)
+CHRONY_SERVICE_STARTUP=$(systemctl is-enabled chrony)
+BIND_CONFIG_CHECK=$(named-checkconf)
+if [[ "{$?}" = 0 ]]; then
+        BIND_CONFIG_CHECK="BIND Config OK"
+else
+        BIND_CONFIG_CHECK="BIND Config is INCORRECT"
+fi
+BIND_DLZ=$(named-checkconf -p | grep -A 4 -E '^[[:space:]]*dlz ')
+DC_RECORD_A=$(dig @127.0.0.1 "$DC_FQDN" A +short)
+KERBEROS_DISCOVER=$(dig @127.0.0.1 "_kerberos._udp.$DNS_DOMAIN" SRV +short)
+RESOLV_CHECK=$(dig @127.0.0.1 esmerkan.com A +short)
+DNS_SERVER=$(cat /etc/resolv.conf)
+NTLM_POLICY=$(testparm -s -d 0 --parameter-name='ntlm auth')
+SMB_MIN_VER=$(testparm -s -d 0 --parameter-name='server min protocol')
+SMB_MAX_VER=$(testparm -s -d 0 --parameter-name='server max protocol')
+SMB_SIGN=$(testparm -s -d 0 --parameter-name='server signing')
+SMB_ENCRYPT=$(testparm -s -d 0 --parameter-name='smb encrypt')
+LDAP_STRONG_AUTH=$(testparm -s -d 0 --parameter-name='ldap server require strong auth')
+TLS_ENABLE_CHECK=$(testparm -s -d 0 --parameter-name='tls enabled')
+LDAP_SASL_CHECK=$(testparm -s -d 0 --parameter-name='client ldap sasl wrapping')
+NETLOGON_SECURE_CHECK=$(testparm -s -d 0 --parameter-name='server schannel require seal')
+PRINTER_SHARING=$(testparm -s -d 0 --parameter-name='load printers')
+PRINTER_SPOOLS=$(testparm -s -d 0 --parameter-name='disable spoolss')
+PRINTCAP_NAME=$(testparm -s -d 0 --parameter-name='printcap name')
+LOG_LEVEL=$(testparm -s -d 0 --parameter-name='log level')
+LOG_FILE=$(testparm -s -d 0 --parameter-name='log file')
+LOG_BACKEND=$(testparm -s -d 0 --parameter-name='logging')
+SHOW_REPL=$(samba-tool drs showrepl -d 0)
+PORT53_PROCESS=$(ss -lntup | grep -E ':53[[:space:]]')
+BIND_YETKILI_MI=$(dig @127.0.0.1 "$DNS_DOMAIN" SOA +norecurse)
+TIME_SYNC=$(chronyc tracking)
+NTP_SOURCES=$(chronyc sources -v)
+pause
 }
+
+
+
+
+#function autoreport(){
+#        CHECKMARK="${GREEN}✔ SUCCESS${NOCOL}"
+#        FAILMARK="${RED}✘ FAIL${NOCOL}"
+#        REALM_FILE="/etc/samba/smb.conf"
+#        LOGFILE="/var/log/samba-ad-check.log"
+#        echo "--- Samba AD Environment Control Logs: $(date) ---" > $LOGFILE
+#        REALM=$(grep -E 'realm\s+=' $REALM_FILE | awk '{print $3}')
+#        if [ -z "$REALM" ]; then
+#                echo -e "${FAILMARK} Realm info Not Found in SMB.CONF" | tee -a $LOGFILE
+#                exit 1
+#        fi
+#
+#        DOMAIN=$(echo $REALM | cut -d "." -f1)
+#
+#        if grep -q "server services = -dns" $REALM_FILE; then
+#                DNS_BACKEND="BIND9 DLZ"
+#        else
+#                DNS_BACKEND="Samba Internal DNS"
+#        fi
+#
+#	# Replication Control
+#	samba-tool drs showrepl > /tmp/showrepl.tmp
+#	if grep -q "failed" /tmp/showrepl.tmp; then
+#		REPL_STATUS="Critical:Replication errors found!"
+#	else
+#		REPL_STATUS="Replication check result no errors"
+#	fi
+#
+#	# GPO Control
+#	GPO_COUNT=$(samba-tool gpo listall | grep "display name" | wc -l)
+#
+#        echo -e
+#        echo "${GREEN}----------------------------------------------------------------------------------------------${RESET}"
+#        echo "${BOLD}${BLUE}${UNDERLINE}=== Samba Active Directory Environment Control & Report ===${RESET}"
+#        echo "Domain Realm (REALM): $REALM" #>> $LOGFILE
+#        echo "NetBIOS (DOMAIN): $DOMAIN"
+#        echo "DNS Backend: $DNS_BACKEND"
+#	echo "Replication Check: $REPL_STATUS"
+#	echo "GPO Count: $GPO_COUNT"
+#	echo -e
+#	pause
+#}
 
 function read_input(){
 local c
