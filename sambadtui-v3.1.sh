@@ -795,11 +795,20 @@ echo "| DB Check          : {$DB_CHECK}"
 echo "| ACL Check         : {$ACL_CHECK}"
 echo "| Password Policy   : {$PASSWORD_POLICY}"
 echo " ________________________________________________________________________________________"
+echo " SERVICE INFO        "
+echo " __________________  "
+echo "| AD/DC Service     : {$ADDC_SERVICE_ISACTIVE}   - {$ADDC_SERVICE_STARTUP}"
+echo "| DNS   Service     : {$NAMED_SERVICE_ISACTIVE}  - {$NAMED_SERVICE_STARTUP}"
+echo "| TIME  Service     : {$CHRONY_SERVICE_ISACTIVE} - {$CHRONY_SERVICE_STARTUP}"
+echo "| BIND  Config      : {$BIND_CONFIG_CHECK}"
+echo "| BIND  DLZ         : {$BIND_DLZ}"
+echo "| DC    Record(A)   : {$DC_RECORD_A}"
+echo "| Kerberos Discover : {$KERBEROS_DISCOVER}"
+echo "| Resolv Check      : {$RESOLV_CHECK}"
+echo "| DNS Server        : {$DNS_SERVER}"
+echo " ________________________________________________________________________________________"
 pause
 }
-
-
-
 
 #function autoreport(){
 #        CHECKMARK="${GREEN}✔ SUCCESS${NOCOL}"
