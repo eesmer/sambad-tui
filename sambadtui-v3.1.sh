@@ -2,7 +2,7 @@
 
 #----------------------------------------------------------------
 # SambAD-TUI Script v3.1
-# BuildDate:02112026
+# BuildDate:01112026
 # https://github.com/eesmer/sambad-tui
 #----------------------------------------------------------------
 
@@ -774,8 +774,32 @@ PORT53_PROCESS=$(ss -lntup | grep -E ':53[[:space:]]')
 BIND_YETKILI_MI=$(dig @127.0.0.1 "$DNS_DOMAIN" SOA +norecurse)
 TIME_SYNC=$(chronyc tracking)
 NTP_SOURCES=$(chronyc sources -v)
+
+echo ".:: SambAD-TUI General Domain Report ::."
+echo " ________________________________________________________________________________________"
+echo " DOMAIN INFO         "
+echo " __________________  "
+echo "| Domain Name       : {$DNS_DOMAIN_NAME}"
+echo "| Kerberos REALM    : {$KERBEROS_REALM}"
+echo "| NETBIOS Name      : {$NETBIOS_DOMAIN_NAME}"
+echo "| FQDN              : {$FQDN_NAME}"
+echo "| Role Info         : {$SAMBA_ROLE}"
+echo "| Samba Version     : {$SAMBA_VER}"
+echo "| Functional Level  : {$FUNCTIOAN_LEVEL}"
+echo "| DC Count          : {$DC_COUNT}"
+echo "| DC List           : {$DC_LIST}"
+echo "| Domain Objects    : {$DC_OBJECTS}"
+echo "| FSMO Roles        : {$FSMO_ROLES}"
+echo "| FSMO DCs          : {$DC_FSMO}"
+echo "| DB Check          : {$DB_CHECK}"
+echo "| ACL Check         : {$ACL_CHECK}"
+echo "| Password Policy   : {$PASSWORD_POLICY}"
+echo " ________________________________________________________________________________________"
 pause
 }
+
+
+
 
 #function autoreport(){
 #        CHECKMARK="${GREEN}✔ SUCCESS${NOCOL}"
@@ -865,7 +889,7 @@ case $c in
 87)dns_status ;;
 88)query_dns_all ;;
 89)logviewer ;;
-90)general_report ;;
+90)autoreport ;;
 91)sysvol_check ;;
 99)exit 0 ;;
 *)
