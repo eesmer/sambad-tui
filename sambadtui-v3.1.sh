@@ -2,7 +2,7 @@
 
 #----------------------------------------------------------------
 # SambAD-TUI Script v3.1
-# BuildDate:01112026
+# BuildDate:02112026
 # https://github.com/eesmer/sambad-tui
 #----------------------------------------------------------------
 
@@ -777,9 +777,6 @@ NTP_SOURCES=$(chronyc sources -v)
 pause
 }
 
-
-
-
 #function autoreport(){
 #        CHECKMARK="${GREEN}✔ SUCCESS${NOCOL}"
 #        FAILMARK="${RED}✘ FAIL${NOCOL}"
@@ -868,7 +865,7 @@ case $c in
 87)dns_status ;;
 88)query_dns_all ;;
 89)logviewer ;;
-90)autoreport ;;
+90)general_report ;;
 91)sysvol_check ;;
 99)exit 0 ;;
 *)
