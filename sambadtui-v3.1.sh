@@ -810,49 +810,6 @@ echo " _________________________________________________________________________
 pause
 }
 
-#function autoreport(){
-#        CHECKMARK="${GREEN}✔ SUCCESS${NOCOL}"
-#        FAILMARK="${RED}✘ FAIL${NOCOL}"
-#        REALM_FILE="/etc/samba/smb.conf"
-#        LOGFILE="/var/log/samba-ad-check.log"
-#        echo "--- Samba AD Environment Control Logs: $(date) ---" > $LOGFILE
-#        REALM=$(grep -E 'realm\s+=' $REALM_FILE | awk '{print $3}')
-#        if [ -z "$REALM" ]; then
-#                echo -e "${FAILMARK} Realm info Not Found in SMB.CONF" | tee -a $LOGFILE
-#                exit 1
-#        fi
-#
-#        DOMAIN=$(echo $REALM | cut -d "." -f1)
-#
-#        if grep -q "server services = -dns" $REALM_FILE; then
-#                DNS_BACKEND="BIND9 DLZ"
-#        else
-#                DNS_BACKEND="Samba Internal DNS"
-#        fi
-#
-#	# Replication Control
-#	samba-tool drs showrepl > /tmp/showrepl.tmp
-#	if grep -q "failed" /tmp/showrepl.tmp; then
-#		REPL_STATUS="Critical:Replication errors found!"
-#	else
-#		REPL_STATUS="Replication check result no errors"
-#	fi
-#
-#	# GPO Control
-#	GPO_COUNT=$(samba-tool gpo listall | grep "display name" | wc -l)
-#
-#        echo -e
-#        echo "${GREEN}----------------------------------------------------------------------------------------------${RESET}"
-#        echo "${BOLD}${BLUE}${UNDERLINE}=== Samba Active Directory Environment Control & Report ===${RESET}"
-#        echo "Domain Realm (REALM): $REALM" #>> $LOGFILE
-#        echo "NetBIOS (DOMAIN): $DOMAIN"
-#        echo "DNS Backend: $DNS_BACKEND"
-#	echo "Replication Check: $REPL_STATUS"
-#	echo "GPO Count: $GPO_COUNT"
-#	echo -e
-#	pause
-#}
-
 function read_input(){
 local c
 read -p "${BOLD}${WHITE}You can choose from the menu numbers${RESET} " c
