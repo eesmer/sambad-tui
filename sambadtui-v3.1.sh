@@ -32,6 +32,12 @@ WHITE=$(tput setaf 7)
 
 SERVER=$(ip route get 8.8.8.8 | awk '{for(i=1;i<=NF;i++) if($i=="src") print $(i+1)}' | head -n 1)
 ZONE=$(samba-tool domain info $SERVER |grep Domain |cut -d':' -f2 |cut -d' ' -f2)
+ERROR_LOG=$(mktemp)
+echo ".:: SambAD-TUI ::." > $ERROR_LOG
+echo "---------------------------------------------------------------------------------------------------------------" >> $ERROR_LOG
+echo "This file contains runtime messages generated during the process of producing output that is sent to /dev/null" >> $ERROR_LOG
+echo "---------------------------------------------------------------------------------------------------------------" >> $ERROR_LOG
+echo "" >> $ERROR_LOG
 
 UI_PUSH() { tput smcup 2>/dev/null || true; tput civis 2>/dev/null || true; }
 UI_POP()  { tput cnorm 2>/dev/null || true; tput rmcup 2>/dev/null || true; }
@@ -99,13 +105,12 @@ echo "   |----------------------------------------------------------------------
 echo "   | 81.Database Check         | 90.Generate General Report                                    |"
 echo "   | 82.Show FSMO Role         | ---------------------------                                   |"
 echo "   | 83.Show Processes         | 91.SYSVOL Check                                               |"
-echo "   | 84.Domain Info            |                                                               |"
+echo "   | 84.Domain Info            | 92.Log Viewer                                                 |"
 echo "   | 85.Repl.Status            |                                                               |"
-echo "   | ---------------------     |                                                               |"
-echo "   | 86.Listening Ports        |                                                               |"
+echo "   | ---------------------     | ---------------------                                         |"
+echo "   | 86.Listening Ports        | 95.Show Error Logs                                            |"
 echo "   | 87.DNS Status             |                                                               |"
 echo "   | 88.Query DNS Records      |                                                               |"
-echo "   | 89.LOG Viewer             |                                                               |"
 echo "   |-------------------------------------------------------------------------------------------|"
 echo "     ${BOLD}${RED}${UNDERLINE}99.Exit${RESET} | 0.About                                         "
 echo "   ---------------------------------------------------------------------------------------------"
@@ -697,7 +702,8 @@ function query_dns_all(){
 }
 
 function logviewer(){
-	LOGFILE=$(grep -E '^\s*log file\s*=' /etc/samba/smb.conf | sed -E 's/^\s*log file\s*=\s*//' | xargs 2>/dev/null)
+	#LOGFILE=$(grep -E '^\s*log file\s*=' /etc/samba/smb.conf | sed -E 's/^\s*log file\s*=\s*//' | xargs 2>/dev/null)
+	LOGFILE=$(testparm -s -d 0 --parameter-name='log file' 2>>"$ERROR_LOG")
         cat "$LOGFILE"
         echo ""
         echo "----------------------------------------------------------------------- log file showed from sambadtui -----------------------------------------------------------------------"
@@ -723,9 +729,9 @@ function general_report(){
 DNS_DOMAIN=${REALM,,}
 DC_FQDN=$(hostname -f)
 DNS_DOMAIN_NAME=$(printf '%s\n' "$DNS_DOMAIN")
-KERBEROS_REALM=$(testparm -s -d 0 --parameter-name='realm')
-NETBIOS_DOMAIN_NAME=$(testparm -s -d 0 --parameter-name='workgroup')
-SAMBA_ROLE=$(testparm -s -d 0 --parameter-name='server role')
+KERBEROS_REALM=$(testparm -s -d 0 --parameter-name='realm' 2>>"$ERROR_LOG")
+NETBIOS_DOMAIN_NAME=$(testparm -s -d 0 --parameter-name='workgroup' 2>>"$ERROR_LOG")
+SAMBA_ROLE=$(testparm -s -d 0 --parameter-name='server role' 2>>"$ERROR_LOG")
 FQDN_NAME=$(hostname -f)
 SAMBA_VER=$(samba --version)
 FUNCTION_LEVEL=$(samba-tool domain level show -d 0)
@@ -754,21 +760,21 @@ DC_RECORD_A=$(dig @127.0.0.1 "$DC_FQDN" A +short)
 KERBEROS_DISCOVER=$(dig @127.0.0.1 "_kerberos._udp.$DNS_DOMAIN" SRV +short)
 RESOLV_CHECK=$(dig @127.0.0.1 esmerkan.com A +short)
 DNS_SERVER=$(cat /etc/resolv.conf)
-NTLM_POLICY=$(testparm -s -d 0 --parameter-name='ntlm auth')
-SMB_MIN_VER=$(testparm -s -d 0 --parameter-name='server min protocol')
-SMB_MAX_VER=$(testparm -s -d 0 --parameter-name='server max protocol')
-SMB_SIGN=$(testparm -s -d 0 --parameter-name='server signing')
-SMB_ENCRYPT=$(testparm -s -d 0 --parameter-name='smb encrypt')
-LDAP_STRONG_AUTH=$(testparm -s -d 0 --parameter-name='ldap server require strong auth')
-TLS_ENABLE_CHECK=$(testparm -s -d 0 --parameter-name='tls enabled')
-LDAP_SASL_CHECK=$(testparm -s -d 0 --parameter-name='client ldap sasl wrapping')
-NETLOGON_SECURE_CHECK=$(testparm -s -d 0 --parameter-name='server schannel require seal')
-PRINTER_SHARING=$(testparm -s -d 0 --parameter-name='load printers')
-PRINTER_SPOOLS=$(testparm -s -d 0 --parameter-name='disable spoolss')
-PRINTCAP_NAME=$(testparm -s -d 0 --parameter-name='printcap name')
-LOG_LEVEL=$(testparm -s -d 0 --parameter-name='log level')
-LOG_FILE=$(testparm -s -d 0 --parameter-name='log file')
-LOG_BACKEND=$(testparm -s -d 0 --parameter-name='logging')
+NTLM_POLICY=$(testparm -s -d 0 --parameter-name='ntlm auth' 2>>"$ERROR_LOG")
+SMB_MIN_VER=$(testparm -s -d 0 --parameter-name='server min protocol' 2>>"$ERROR_LOG")
+SMB_MAX_VER=$(testparm -s -d 0 --parameter-name='server max protocol' 2>>"$ERROR_LOG")
+SMB_SIGN=$(testparm -s -d 0 --parameter-name='server signing' 2>>"$ERROR_LOG")
+SMB_ENCRYPT=$(testparm -s -d 0 --parameter-name='smb encrypt' 2>>"$ERROR_LOG")
+LDAP_STRONG_AUTH=$(testparm -s -d 0 --parameter-name='ldap server require strong auth' 2>>"$ERROR_LOG")
+TLS_ENABLE_CHECK=$(testparm -s -d 0 --parameter-name='tls enabled' 2>>"$ERROR_LOG")
+LDAP_SASL_CHECK=$(testparm -s -d 0 --parameter-name='client ldap sasl wrapping' 2>>"$ERROR_LOG")
+NETLOGON_SECURE_CHECK=$(testparm -s -d 0 --parameter-name='server schannel require seal' 2>>"$ERROR_LOG")
+PRINTER_SHARING=$(testparm -s -d 0 --parameter-name='load printers' 2>>"$ERROR_LOG")
+PRINTER_SPOOLS=$(testparm -s -d 0 --parameter-name='disable spoolss' 2>>"$ERROR_LOG")
+PRINTCAP_NAME=$(testparm -s -d 0 --parameter-name='printcap name' 2>>"$ERROR_LOG")
+LOG_LEVEL=$(testparm -s -d 0 --parameter-name='log level' 2>>"$ERROR_LOG")
+LOG_FILE=$(testparm -s -d 0 --parameter-name='log file' 2>>"$ERROR_LOG")
+LOG_BACKEND=$(testparm -s -d 0 --parameter-name='logging' 2>>"$ERROR_LOG")
 SHOW_REPL=$(samba-tool drs showrepl -d 0)
 PORT53_PROCESS=$(ss -lntup | grep -E ':53[[:space:]]')
 BIND_YETKILI_MI=$(dig @127.0.0.1 "$DNS_DOMAIN" SOA +norecurse)
@@ -808,6 +814,15 @@ echo "| Resolv Check      : {$RESOLV_CHECK}"
 echo "| DNS Server        : {$DNS_SERVER}"
 echo " ________________________________________________________________________________________"
 pause
+}
+
+show_errorlogs(){
+cat $ERROR_LOG
+pause
+}
+
+clean_runtimefiles(){
+rm -f $ERROR_LOG
 }
 
 function read_input(){
@@ -854,10 +869,11 @@ case $c in
 86)listening_ports ;;
 87)dns_status ;;
 88)query_dns_all ;;
-89)logviewer ;;
 90)general_report ;;
 91)sysvol_check ;;
-99)exit 0 ;;
+92)logviewer ;;
+95)show_errorlogs ;;
+99)clean_runtimefiles && exit 0 ;;
 *)
 echo "Please select from the menu numbers"
 pause
