@@ -105,7 +105,7 @@ echo "   |----------------------------------------------------------------------
 echo "   | 81.Database Check         | 90.Generate General Report                                    |"
 echo "   | 82.Show FSMO Role         | ---------------------------                                   |"
 echo "   | 83.Show Processes         | 91.SYSVOL Check                                               |"
-echo "   | 84.Domain Info            | 92.Log Viewer                                                 |"
+echo "   | 84.Domain Info            | 92.Show Samba Logs                                            |"
 echo "   | 85.Repl.Status            |                                                               |"
 echo "   | ---------------------     | ---------------------                                         |"
 echo "   | 86.Listening Ports        | 95.Show Error Logs                                            |"
@@ -701,15 +701,63 @@ function query_dns_all(){
 	pause
 }
 
-function logviewer(){
-	#LOGFILE=$(grep -E '^\s*log file\s*=' /etc/samba/smb.conf | sed -E 's/^\s*log file\s*=\s*//' | xargs 2>/dev/null)
-	LOGFILE=$(testparm -s -d 0 --parameter-name='log file' 2>>"$ERROR_LOG")
-        cat "$LOGFILE"
-        echo ""
-        echo "----------------------------------------------------------------------- log file showed from sambadtui -----------------------------------------------------------------------"
-        echo ""
-        pause
+show_sambalog() {
+local mode="${1:-general}"
+local logfile
+if ! logfile=$(testparm -s -d 0 \
+	--parameter-name='log file' 2>>"$ERROR_LOG"); then
+	echo "Samba log path Not Found"
+        return 1
+fi
+if [[ -z "$logfile" || "$logfile" == *%* ]]; then
+	echo "Log file could not read"
+        printf '%s\n' "$logfile"
+        return 1
+fi
+if [[ ! -f "$logfile" || ! -r "$logfile" ]]; then
+	printf 'Log file Not Found or could not be read: %s\n' \
+	"$logfile"
+	return 1
+fi
+case "$mode" in
+	general)
+	tail -n 200 -- "$logfile"
+        ;;
+        auth)
+        awk '
+        /Auth: / {
+        line = $0
+        sub(/^[[:space:]]+/, "", line)
+        records[count % 100] = line
+        count++
+        }
+        END {
+        if (count == 0) {
+        print "Auth: record Not Found"
+        exit
+        }
+        start = (count > 100 ? count - 100 : 0)
+        for (i = start; i < count; i++)
+        print records[i % 100]
+        }
+        ' "$logfile"
+        ;;
+        *)
+        return 1
+        ;;
+esac
+pause
 }
+
+#function logviewer(){
+#	#LOGFILE=$(grep -E '^\s*log file\s*=' /etc/samba/smb.conf | sed -E 's/^\s*log file\s*=\s*//' | xargs 2>/dev/null)
+#	LOGFILE=$(testparm -s -d 0 --parameter-name='log file' 2>>"$ERROR_LOG")
+#        cat "$LOGFILE"
+#        echo ""
+#        echo "----------------------------------------------------------------------- log file showed from sambadtui -----------------------------------------------------------------------"
+#        echo ""
+#        pause
+#}
 
 function sysvol_check(){
 if SYSVOL_OUTPUT=$(samba-tool ntacl sysvolcheck -d 0 2>&1); then
@@ -871,7 +919,7 @@ case $c in
 88)query_dns_all ;;
 90)general_report ;;
 91)sysvol_check ;;
-92)logviewer ;;
+92)show_sambalog ;;
 95)show_errorlogs ;;
 99)clean_runtimefiles && exit 0 ;;
 *)
